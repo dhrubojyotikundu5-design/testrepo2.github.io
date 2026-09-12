@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slope Risk &mdash; Northeast India Landslide Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="contour-field" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">Random Forest &middot; 300 trees &middot; trained on NE-states slide records</p>
+    <h1>Will this slope fail as a slide or a fall?</h1>
+    <p class="lede">Enter a location's coordinates and its rainfall, soil, and vegetation profile. The
+    model, trained on landslide records from Assam, Arunachal Pradesh, Manipur, Meghalaya, Mizoram,
+    Nagaland and Tripura, estimates whether the dominant movement type there tends to be a
+    high-risk slide/fall or a lower-risk alternative (flow, subsidence, topple, complex).</p>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="panel form-panel" aria-labelledby="form-heading">
+    <h2 id="form-heading">Site conditions</h2>
+
+    <form id="risk-form">
+
+      <fieldset>
+        <legend>Location</legend>
+        <div class="field-row">
+          <label for="state">State</label>
+          <select id="state" required></select>
+        </div>
+        <div class="field-row">
+          <label for="district">District</label>
+          <select id="district" required></select>
+        </div>
+        <div class="field-row two-col">
+          <div>
+            <label for="latitude">Latitude</label>
+            <input type="number" id="latitude" step="0.0001" placeholder="e.g. 25.578" required>
+          </div>
+          <div>
+            <label for="longitude">Longitude</label>
+            <input type="number" id="longitude" step="0.0001" placeholder="e.g. 91.893" required>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Environmental profile</legend>
+        <div class="field-row">
+          <label for="rainfall-pattern">Rainfall pattern</label>
+          <select id="rainfall-pattern" required></select>
+        </div>
+        <div class="field-row">
+          <label for="soil">Soil distribution</label>
+          <select id="soil" required></select>
+        </div>
+        <div class="field-row">
+          <label for="vegetation">Vegetation cover</label>
+          <select id="vegetation" required></select>
+        </div>
+        <div class="field-row two-col">
+          <div>
+            <label for="annual-rainfall">Annual rainfall normal (mm)</label>
+            <input type="number" id="annual-rainfall" step="1" placeholder="e.g. 2500" required>
+          </div>
+          <div>
+            <label for="movement-history">Movement history (years, if known)</label>
+            <input type="number" id="movement-history" step="1" placeholder="leave blank if unknown">
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="predict-btn">Assess risk</button>
+    </form>
+  </section>
+
+  <section class="panel result-panel" aria-live="polite">
+    <h2>Assessment</h2>
+    <div id="result-empty" class="result-empty">
+      <p>Fill in the site conditions and press <strong>Assess risk</strong> to see the model's estimate.</p>
+    </div>
+
+    <div id="result-content" class="result-content" hidden>
+      <div class="verdict" id="verdict">
+        <span class="verdict-label" id="verdict-label">&mdash;</span>
+      </div>
+
+      <div class="prob-bar-wrap">
+        <div class="prob-bar">
+          <div class="prob-fill prob-fill-high" id="prob-fill-high"></div>
+        </div>
+        <div class="prob-legend">
+          <span><i class="dot dot-high"></i> Slide / Fall <span id="prob-high-pct">&mdash;</span></span>
+          <span><i class="dot dot-low"></i> Other movement <span id="prob-low-pct">&mdash;</span></span>
+        </div>
+      </div>
+
+      <p class="verdict-note" id="verdict-note"></p>
+
+      <details class="tree-detail">
+        <summary>How this was computed</summary>
+        <p>Each of the forest's 300 decision trees votes a probability from the site conditions
+        above. This page averages all 300 votes entirely in your browser &mdash; no server, no data
+        leaves your machine.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Trained on the NE 7-states district &amp; locality environmental dataset. High risk = Slide or
+  Fall movement type; Low risk = Flow, Subsidence, Topple, or Composite. This is a statistical
+  estimate from historical records, not a geotechnical assessment &mdash; it does not replace a site
+  survey by a qualified engineer.</p>
+</footer>
+
+<script src="categories.js"></script>
+<script src="model_data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
