@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slope Watch — Landslide Risk Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <h1>Slope&nbsp;Watch</h1>
+    <p class="tagline">A field terrain assessment for landslide risk in Northeast India's hill states — modeled from historical slope-movement records.</p>
+  </div>
+</header>
+
+<main class="wrap layout">
+
+  <section class="hero-panel" aria-hidden="true">
+    <svg viewBox="0 0 320 320" class="contour-art">
+      <g fill="none" stroke="#6B8F71" stroke-width="1">
+        <path d="M40,260 C80,220 60,180 100,160 C140,140 120,90 170,80 C220,70 240,110 270,90" opacity="0.35"/>
+        <path d="M30,240 C75,205 55,165 95,148 C138,130 118,82 165,68 C215,55 238,98 278,78" opacity="0.5"/>
+        <path d="M20,218 C68,188 48,150 90,134 C134,118 112,72 158,55 C205,40 232,84 284,64" opacity="0.65"/>
+        <path d="M12,196 C60,168 42,132 84,118 C128,102 105,60 150,42 C198,25 226,68 288,48" opacity="0.8"/>
+        <path d="M6,174 C52,148 36,114 78,100 C122,84 98,46 142,28 C188,12 216,52 292,32" opacity="1"/>
+      </g>
+      <circle cx="196" cy="46" r="5" fill="#A63D2E"/>
+      <line x1="196" y1="46" x2="196" y2="20" stroke="#A63D2E" stroke-width="1.5"/>
+      <text x="203" y="24" font-family="IBM Plex Mono" font-size="9" fill="#9AA39C">recorded slip</text>
+    </svg>
+    <p class="hero-caption">Elevation contours, illustrative — the model reads real latitude, longitude, rainfall, and slope-history inputs, not the map itself.</p>
+  </section>
+
+  <section class="form-panel">
+    <form id="assess-form">
+      <fieldset>
+        <legend>Location</legend>
+        <div class="field-row">
+          <label class="field">
+            <span>Latitude</span>
+            <input id="field-lat" type="number" step="any" placeholder="e.g. 25.668" required>
+          </label>
+          <label class="field">
+            <span>Longitude</span>
+            <input id="field-lon" type="number" step="any" placeholder="e.g. 94.107" required>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Site conditions</legend>
+        <div class="field-row">
+          <label class="field">
+            <span>Movement history (0 = none recorded, 1 = prior movement)</span>
+            <input id="field-movement" type="number" step="1" min="0" max="1" placeholder="0">
+          </label>
+          <label class="field">
+            <span>Annual rainfall normal (mm)</span>
+            <input id="field-rainfall" type="number" step="any" placeholder="e.g. 2400">
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Regional profile</legend>
+        <div id="categorical-fields" class="field-grid">
+          <!-- populated by app.js -->
+        </div>
+      </fieldset>
+
+      <button id="assess-btn" type="submit" disabled>Assess risk</button>
+      <p id="load-status" class="status">Loading model…</p>
+    </form>
+  </section>
+
+  <section id="result-panel" class="result-panel">
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 220 130" class="gauge">
+        <path d="M10,110 A100,100 0 0,1 210,110" fill="none" stroke="#2B332F" stroke-width="14" stroke-linecap="round"/>
+        <path d="M10,110 A100,100 0 0,1 76,15" fill="none" stroke="#6B8F71" stroke-width="14" stroke-linecap="round"/>
+        <path d="M76,15 A100,100 0 0,1 144,15" fill="none" stroke="#C68A3E" stroke-width="14" stroke-linecap="round"/>
+        <path d="M144,15 A100,100 0 0,1 210,110" fill="none" stroke="#A63D2E" stroke-width="14" stroke-linecap="round"/>
+        <g id="gauge-needle" transform="rotate(-90 110 110)">
+          <line x1="110" y1="110" x2="110" y2="30" stroke="#EDE7DC" stroke-width="3"/>
+          <circle cx="110" cy="110" r="6" fill="#EDE7DC"/>
+        </g>
+        <text id="gauge-value" x="110" y="105" text-anchor="middle" font-family="IBM Plex Mono" font-size="22" font-weight="600" fill="#EDE7DC">—</text>
+      </svg>
+      <p id="risk-label" class="risk-label">Awaiting assessment</p>
+    </div>
+    <p id="result-note" class="result-note">Fill in the form and select "Assess risk" to run the model on this site.</p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Runs entirely in your browser: a 300-tree random forest, exported to flat arrays and walked in JavaScript — no server, no data leaves your device.</p>
+    <p class="caveat">Note: a handful of "Soil Distribution" and "Vegetation" categories in the source training data were corrupted (raw record dumps rather than clean labels) and have been excluded from the dropdowns above. Predictions are a statistical estimate from historical records, not a geotechnical survey.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
